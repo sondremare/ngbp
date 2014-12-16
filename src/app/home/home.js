@@ -38,7 +38,58 @@ angular.module( 'ngBoilerplate.home', [
 /**
  * And of course we define a controller for our route.
  */
-.controller( 'HomeCtrl', function HomeController( $scope ) {
+.controller( 'HomeCtrl', function HomeController( $scope, $location ) {
+        var options = {
+            adimpressions:true,
+            adsparam:"WT.ac",
+            anchor:false,
+            dcsid:"dcssxsnsvuz5bdb3age4v40mz_7d9c",
+            domain:"statse.webtrendslive.com",
+            download:true,
+            downloadtypes:"csv,doc,docx,epub,eps,gif,gzip,jpg,pdf,png,pps,ppsx,ppt,pptx,rar,rtf,sdv,txt,xls,xlsx,zip",
+            enabled:true,
+            fpcdom:".landkredittbank.no",
+            i18n:false,
+            javascript:true,
+            offsite:true,
+            onsitedoms:"",
+            paidsearchparams:"gclid",
+            rightclick:true,
+            timezone:1,
+            trimoffsiteparams:false
+        };
+
+        window.webtrendsAsyncInit = function () {
+            var dcs = new Webtrends.dcs().init(options).track();
+        };
+
+        function loadTrackerScript(src) {
+            var script = document.createElement('script');
+            var firstScript = document.getElementsByTagName('script')[0];
+            script.async = 1;
+            script.src = src;
+            firstScript.parentNode.insertBefore(script,firstScript);
+            return script;
+        }
+        function loadWebtrendsScript() {
+            return loadTrackerScript('//s.webtrends.com/js/webtrends.js');
+        }
+
+        var script = loadWebtrendsScript();
+
+
+        $scope.trackPageView = function () {
+            var pageView = $location.path();
+            if (typeof Webtrends !== 'undefined') {
+                window.dcsMultiTrack(
+                    'DCS.dcsuri', pageView,
+                    'WT.ti', pageView,
+                    'WT.dl', '0',
+                    'WT.cg_n', 'SMARTbank',
+                    'DCSext.wa_app', 'smartbank'
+                );
+            }
+        };
 })
 
 ;
